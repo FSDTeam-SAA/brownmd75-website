@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "../app/(website)/globals.css";
+import "./globals.css";
 import MainProviders from "@/Providers/MainProviders";
 import Provider from "@/Providers/Provider";
 import { Toaster } from "sonner";
-import Footer from "@/components/sheared/Footer";
+import Navbar from "@/components/sheared/Navbar";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -26,8 +26,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
         <MainProviders>
+          <Navbar />
           <Provider> {children} </Provider>
-          <Footer />
         </MainProviders>
         <Toaster position="top-right" closeButton />
       </body>
