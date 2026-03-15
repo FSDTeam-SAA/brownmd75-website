@@ -3,9 +3,29 @@
 import { useState } from "react";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+
+  const routes = [
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Equipment",
+      path: "/equipment",
+    },
+    {
+      name: "About Us",
+      path: "/about-us",
+    },
+    {
+      name: "Contact Us",
+      path: "/contact-us",
+    },
+  ];
 
   return (
     <nav className="w-full border-b bg-white">
@@ -18,18 +38,16 @@ export default function Navbar() {
         {/* Desktop Right Side Menu */}
         <div className="hidden md:flex items-center gap-8 text-[#4B5563] font-medium">
           <ul className="flex items-center gap-8">
-            <li className="cursor-pointer hover:text-[#4B5563] hover:font-semibold">
-              Home
-            </li>
-            <li className="cursor-pointer hover:text-[#4B5563] hover:font-semibold">
-              Equipment
-            </li>
-            <li className="cursor-pointer hover:text-[#4B5563] hover:font-semibold">
-              About Us
-            </li>
-            <li className="cursor-pointer hover:text-[#4B5563] hover:font-semibold">
-              Contact Us
-            </li>
+            {routes.map((route) => (
+              <li key={route.path}>
+                <Link
+                  href={route.path}
+                  className="cursor-pointer hover:text-[#4B5563] hover:font-semibold"
+                >
+                  {route.name}
+                </Link>
+              </li>
+            ))}
           </ul>
 
           <ShoppingCart className="w-5 h-5 text-gray-700 cursor-pointer" />
