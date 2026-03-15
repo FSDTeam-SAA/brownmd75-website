@@ -18,6 +18,10 @@ export default function Navbar() {
       path: "/equipment",
     },
     {
+      name: "Categories",
+      path: "/categories",
+    },
+    {
       name: "About Us",
       path: "/about-us",
     },
