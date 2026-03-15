@@ -52,9 +52,11 @@ export default function Navbar() {
 
           <ShoppingCart className="w-5 h-5 text-gray-700 cursor-pointer" />
 
-          <button className="bg-primary text-white px-5 py-2 rounded-md font-medium cursor-pointer">
-            Log In
-          </button>
+          <Link href={`/login`}>
+            <button className="bg-primary text-white px-6 py-3 rounded-md font-medium cursor-pointer">
+              Log In
+            </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -82,9 +84,11 @@ export default function Navbar() {
 
             <div className="flex items-center gap-4 pt-2 cursor-pointer">
               <ShoppingCart className="w-5 h-5 cursor-pointer" />
-              <button className="bg-primary text-white px-6 py-3 rounded-md font-medium cursor-pointer">
-                Log In
-              </button>
+              <Link href={`/login`}>
+                <button className="bg-primary text-white px-6 py-3 rounded-md font-medium cursor-pointer">
+                  Log In
+                </button>
+              </Link>
             </div>
           </ul>
         </div>

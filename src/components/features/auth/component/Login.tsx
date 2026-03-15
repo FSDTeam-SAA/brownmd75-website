@@ -139,6 +139,19 @@ export default function Login() {
           >
             {isLoading ? "Logging in..." : "Log In"}
           </Button>
+
+          {/* sign up Link */}
+          <div className="text-center mt-6">
+            <p className="text-gray-700">
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/sign-up"
+                className="text-[#F5A623] font-semibold hover:underline"
+              >
+                Sign Up
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
