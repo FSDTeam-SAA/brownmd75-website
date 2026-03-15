@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import { useEquipmentById } from "../hooks/useEquipment";
 import { EquipmentItem } from "./Equipment";
 import { Star } from "lucide-react";
+import ReviewList from "../../review/component/ReviewList";
+import ReviewForm from "../../review/component/ReviewForm";
 
 export default function EquipmentDetails() {
   const { id } = useParams();
@@ -61,7 +63,7 @@ export default function EquipmentDetails() {
             <div className="flex gap-4 overflow-x-auto pb-2">
               {images.map((img, index) => (
                 <button
-                  key={index}
+                  key={img.url}
                   onClick={() => setActiveImage(index)}
                   className={`relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
                     activeImage === index
@@ -114,12 +116,12 @@ export default function EquipmentDetails() {
 
               <div className="flex items-center gap-2 border-l border-gray-200 pl-6">
                 <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
+                  {[1, 2, 3, 4, 5].map((star) => (
                     <Star
-                      key={`star-${i}`}
+                      key={`hero-star-${star}`}
                       size={16}
                       className={
-                        i < Math.floor(equipment.rating)
+                        star <= Math.floor(equipment.rating)
                           ? "fill-[#f4a100] text-[#f4a100]"
                           : "text-gray-200"
                       }
@@ -168,7 +170,7 @@ export default function EquipmentDetails() {
             </div>
 
             {/* Duration Selector */}
-            <div className="mt-8 grid grid-cols-4 gap-3">
+            {/* <div className="mt-8 grid grid-cols-4 gap-3">
               {prices.map((price) => (
                 <button
                   key={price.key}
@@ -182,7 +184,7 @@ export default function EquipmentDetails() {
                   {price.label}
                 </button>
               ))}
-            </div>
+            </div> */}
 
             <button className="mt-8 w-full rounded-md bg-[#f4a100] py-4 text-lg font-bold text-white shadow-lg transition-all hover:opacity-95 active:scale-[0.98]">
               Book
@@ -204,235 +206,244 @@ export default function EquipmentDetails() {
               Description
             </button>
             <button
-              onClick={() => setActiveTab("specs")}
+              onClick={() => setActiveTab("review")}
               className={`px-8 py-3 text-sm font-bold transition-all rounded-t-md ${
-                activeTab === "specs"
+                activeTab === "review"
                   ? "bg-[#f4a100] text-white"
                   : "bg-white text-gray-600 border border-gray-100 border-b-0"
               }`}
             >
-              Specs
+              Review
             </button>
           </div>
         </div>
 
         {/* Content Details */}
-        <div className="mt-12 space-y-16">
-          {/* Key Features */}
-          <div>
-            <h2 className="text-2xl font-extrabold text-[#f4a100]">
-              Key Features
-            </h2>
-            <div className="mt-8 space-y-6">
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-[#1d2433]">
-                  High Efficiency Motor
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Equipped with a powerful 4kW motor, the pump delivers strong
-                  water pressure and efficient pumping performance, ensuring
-                  smooth operation for extended periods.
-                </p>
+        <div className="mt-12">
+          {activeTab === "description" ? (
+            <div className="space-y-16">
+              {/* Key Features */}
+              <div>
+                <h2 className="text-2xl font-extrabold text-[#f4a100]">
+                  Key Features
+                </h2>
+                <div className="mt-8 space-y-6">
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-[#1d2433]">
+                      High Efficiency Motor
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      Equipped with a powerful 4kW motor, the pump delivers
+                      strong water pressure and efficient pumping performance,
+                      ensuring smooth operation for extended periods.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-[#1d2433]">
+                      Reliable Water Flow
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      With an operating capacity of 4 liters per minute, the
+                      pump maintains consistent water movement suitable for
+                      drainage, irrigation, and construction needs.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-[#1d2433]">
+                      Extended Reach
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      The pump provides a maximum reach of 7 meters, allowing
+                      effective water transfer across short to medium distances.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-[#1d2433]">
+                      Durable Construction
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      Manufactured with high-quality industrial materials, the
+                      pump is designed to withstand harsh environmental
+                      conditions and continuous operation.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-[#1d2433]">
+                      Trusted Brand Engineering
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      Built under the {equipment.brand} brand, known for
+                      durability and reliability in industrial equipment.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-[#1d2433]">
-                  Reliable Water Flow
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  With an operating capacity of 4 liters per minute, the pump
-                  maintains consistent water movement suitable for drainage,
-                  irrigation, and construction needs.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-[#1d2433]">
-                  Extended Reach
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  The pump provides a maximum reach of 7 meters, allowing
-                  effective water transfer across short to medium distances.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-[#1d2433]">
-                  Durable Construction
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Manufactured with high-quality industrial materials, the pump
-                  is designed to withstand harsh environmental conditions and
-                  continuous operation.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-[#1d2433]">
-                  Trusted Brand Engineering
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Built under the {equipment.brand} brand, known for durability
-                  and reliability in industrial equipment.
-                </p>
-              </div>
-            </div>
-          </div>
 
-          {/* Technical Specifications */}
-          <div>
-            <h2 className="text-2xl font-extrabold text-[#f4a100]">
-              Technical Specifications
-            </h2>
-            <div className="mt-8 overflow-hidden rounded-xl border border-gray-100">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
-                      Specifications
-                    </th>
-                    <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
-                      Details
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Model
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      {equipment.model}
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50/50">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Brand
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      {equipment.brand}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Manufacture Year
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      {equipment.manufacture_year}
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50/50">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Rated Power
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      4 kW/hour
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Maximum Reach
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      7 Meter
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50/50">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Operating Capacity
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      4 Litre/Minute
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Delivery Charge
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      ${equipment.deliveryCharge}
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50/50">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Setup Charge
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      ${equipment.setupCharge}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      Total Taxes
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                      ${equipment.total_taxes}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+              {/* Technical Specifications */}
+              <div>
+                <h2 className="text-2xl font-extrabold text-[#f4a100]">
+                  Technical Specifications
+                </h2>
+                <div className="mt-8 overflow-hidden rounded-xl border border-gray-100">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-100">
+                        <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
+                          Specifications
+                        </th>
+                        <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
+                          Details
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Model
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          {equipment.model}
+                        </td>
+                      </tr>
+                      <tr className="bg-gray-50/50">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Brand
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          {equipment.brand}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Manufacture Year
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          {equipment.manufacture_year}
+                        </td>
+                      </tr>
+                      <tr className="bg-gray-50/50">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Rated Power
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          4 kW/hour
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Maximum Reach
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          7 Meter
+                        </td>
+                      </tr>
+                      <tr className="bg-gray-50/50">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Operating Capacity
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          4 Litre/Minute
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Delivery Charge
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          ${equipment.deliveryCharge}
+                        </td>
+                      </tr>
+                      <tr className="bg-gray-50/50">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Setup Charge
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          ${equipment.setupCharge}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          Total Taxes
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                          ${equipment.total_taxes}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
 
-          {/* Rental Pricing */}
-          <div>
-            <h2 className="text-2xl font-extrabold text-[#f4a100]">
-              Rental Pricing
-            </h2>
-            <div className="mt-8 overflow-hidden rounded-xl border border-gray-100">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
-                      Duration
-                    </th>
-                    <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
-                      Price
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {prices.map((p, idx) => (
-                    <tr
-                      key={p.key}
-                      className={idx % 2 === 0 ? "" : "bg-gray-50/50"}
+              {/* Rental Pricing */}
+              <div>
+                <h2 className="text-2xl font-extrabold text-[#f4a100]">
+                  Rental Pricing
+                </h2>
+                <div className="mt-8 overflow-hidden rounded-xl border border-gray-100">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-100">
+                        <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
+                          Duration
+                        </th>
+                        <th className="px-6 py-4 text-sm font-bold text-[#1d2433]">
+                          Price
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {prices.map((p, idx) => (
+                        <tr
+                          key={p.key}
+                          className={idx % 2 === 0 ? "" : "bg-gray-50/50"}
+                        >
+                          <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                            {p.label}ly
+                          </td>
+                          <td className="px-6 py-4 text-sm font-medium text-gray-600">
+                            ${p.value.toFixed(2)}/{p.label}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Ideal Applicants */}
+              <div>
+                <h2 className="text-2xl font-extrabold text-[#f4a100]">
+                  Ideal Applicants
+                </h2>
+                <p className="mt-6 text-gray-600 font-medium">
+                  This {equipment.title} is Suitable For Multiple Industries And
+                  Job Site Requirements:
+                </p>
+                <ul className="mt-6 space-y-3">
+                  {[
+                    "Construction Site Water Removal",
+                    "Agricultural Irrigation Systems",
+                    "Industrial Water Circulation",
+                    "Flood Drainage Operations",
+                    "Tank And Reservoir Water Transfer",
+                  ].map((item, index) => (
+                    <li
+                      key={item}
+                      className="flex gap-4 text-sm font-medium text-gray-600"
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                        {p.label}ly
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-600">
-                        ${p.value.toFixed(2)}/{p.label}
-                      </td>
-                    </tr>
+                      <span>{index + 1}.</span>
+                      <span>{item}</span>
+                    </li>
                   ))}
-                </tbody>
-              </table>
+                </ul>
+              </div>
             </div>
-          </div>
-
-          {/* Ideal Applicants */}
-          <div>
-            <h2 className="text-2xl font-extrabold text-[#f4a100]">
-              Ideal Applicants
-            </h2>
-            <p className="mt-6 text-gray-600 font-medium">
-              This {equipment.title} is Suitable For Multiple Industries And Job
-              Site Requirements:
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Construction Site Water Removal",
-                "Agricultural Irrigation Systems",
-                "Industrial Water Circulation",
-                "Flood Drainage Operations",
-                "Tank And Reservoir Water Transfer",
-              ].map((item, index) => (
-                <li
-                  key={item}
-                  className="flex gap-4 text-sm font-medium text-gray-600"
-                >
-                  <span>{index + 1}.</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          ) : (
+            <div className="space-y-12">
+              <ReviewList />
+              <ReviewForm equipmentId={id as string} />
+            </div>
+          )}
         </div>
       </div>
     </section>

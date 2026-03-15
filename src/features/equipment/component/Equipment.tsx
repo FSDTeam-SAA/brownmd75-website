@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SlidersHorizontal, Star, ListFilter } from "lucide-react";
@@ -313,7 +313,7 @@ export default function Equipment() {
                     </h4> */}
 
                       <button
-                        onClick={() => router.push(`/equipment/${item._id}`)}
+                        onClick={() => router.push(`/equipments/${item._id}`)}
                         className="mt-6 w-full rounded-md bg-[#f4a100] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 cursor-pointer"
                       >
                         View Details
