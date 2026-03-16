@@ -3,9 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCategories } from "../api/getCategories";
 
-export const useCategories = () => {
+export const useCategories = (page: number = 1, limit: number = 6) => {
   return useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
+    queryKey: ["categories", page, limit],
+    queryFn: () => getCategories(page, limit),
   });
 };

@@ -58,7 +58,16 @@ const CheckoutFormModal: React.FC<CheckoutFormModalProps> = ({
     try {
       const result = await postCheckout(payload);
       console.log("Checkout Response:", result);
-      onClose();
+
+      if (
+        result?.success &&
+        paymentMethod === "stripe" &&
+        result?.data?.checkoutUrl
+      ) {
+        window.location.href = result.data.checkoutUrl;
+      } else {
+        onClose();
+      }
     } catch (error) {
       console.error("Checkout failed:", error);
     } finally {

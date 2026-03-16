@@ -7,50 +7,12 @@ import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
-
-const reviews = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
-    review:
-      '"SoundRent saved my gig! My amp broke down hours before the show, and they delivered a replacement within 2 hours. Incredible service!"',
-  },
-  {
-    id: 2,
-    name: "Sarah Miller",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
-    review:
-      '"Renting a grand piano for our wedding was seamless. The team handled delivery and setup perfectly. Highly recommended!"',
-  },
-  {
-    id: 3,
-    name: "David Chen",
-    image:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop",
-    review: `"As a student, I couldn't afford a pro saxophone. SoundRent allowed me to practice on a high-end instrument for a fraction of the cost."`,
-  },
-  {
-    id: 4,
-    name: "Emma Watson",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop",
-    review:
-      '"The booking process was simple and fast. Great support team and very reliable instruments."',
-  },
-  {
-    id: 5,
-    name: "Michael Lee",
-    image:
-      "https://images.unsplash.com/photo-1504593811423-6dd665756598?q=80&w=200&auto=format&fit=crop",
-    review:
-      '"Excellent service from start to finish. Delivery was on time and the equipment quality was top-notch."',
-  },
-];
+import { useTopRatedReviews } from "@/features/review/hooks/useReview";
+import { TReview } from "@/features/review/api/review.api";
 
 export default function Review() {
+  const { data, isLoading } = useTopRatedReviews();
+  const reviews = data?.data?.result || [];
   return (
     <section className="w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,69 +25,88 @@ export default function Review() {
           </h2>
         </div>
 
-        <Swiper
-          modules={[Autoplay, Pagination]}
-          spaceBetween={24}
-          loop
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: true,
-            el: ".custom-swiper-pagination",
-            bulletClass: "custom-bullet",
-            bulletActiveClass: "custom-bullet-active",
-          }}
-          breakpoints={{
-            0: {
-              slidesPerView: 1,
-            },
-            768: {
-              slidesPerView: 2,
-            },
-            1280: {
-              slidesPerView: 3,
-            },
-          }}
-          className="review-swiper"
-        >
-          {reviews.map((review) => (
-            <SwiperSlide key={review.id}>
-              <div className="h-full rounded-2xl border border-[#e5e7eb] bg-white p-6 shadow-[0_4px_12px_rgba(0,0,0,0.04)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
-                <div className="mb-4 flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-4 w-4 fill-[#f4a100] text-[#f4a100]"
-                    />
-                  ))}
-                </div>
+        {isLoading ? (
+          <div className="py-20 text-center text-lg font-medium text-gray-500">
+            Loading reviews...
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="py-20 text-center text-lg font-medium text-gray-500">
+            No reviews available.
+          </div>
+        ) : (
+          <>
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              spaceBetween={24}
+              loop
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              pagination={{
+                clickable: true,
+                el: ".custom-swiper-pagination",
+                bulletClass: "custom-bullet",
+                bulletActiveClass: "custom-bullet-active",
+              }}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                },
+                768: {
+                  slidesPerView: 2,
+                },
+                1280: {
+                  slidesPerView: 3,
+                },
+              }}
+              className="review-swiper"
+            >
+              {reviews.map((review: TReview) => {
+                const userName = review.user?.name || "Anonymous User";
+                const userImage =
+                  review.user?.profileImage ||
+                  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop";
 
-                <p className="min-h-[95px] text-[15px] leading-6 text-[#6b7280]">
-                  {review.review}
-                </p>
+                return (
+                  <SwiperSlide key={review._id}>
+                    <div className="h-full rounded-2xl border border-[#e5e7eb] bg-white p-6 shadow-[0_4px_12px_rgba(0,0,0,0.04)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
+                      <div className="mb-4 flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${i < review.rating ? "fill-[#f4a100] text-[#f4a100]" : "text-gray-200"}`}
+                          />
+                        ))}
+                      </div>
 
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="relative h-11 w-11 overflow-hidden rounded-full">
-                    <Image
-                      src={review.image}
-                      alt={review.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                      <p className="min-h-[95px] text-[15px] leading-6 text-[#6b7280]">
+                        &quot;{review.comment}&quot;
+                      </p>
 
-                  <h3 className="text-[15px] font-bold text-[#111827]">
-                    {review.name}
-                  </h3>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+                      <div className="mt-6 flex items-center gap-3">
+                        <div className="relative h-11 w-11 overflow-hidden rounded-full border border-gray-100 bg-gray-50">
+                          <Image
+                            src={userImage}
+                            alt={userName}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
 
-        <div className="custom-swiper-pagination mt-8 flex items-center justify-center gap-2" />
+                        <h3 className="text-[15px] font-bold text-[#111827]">
+                          {userName}
+                        </h3>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+
+            <div className="custom-swiper-pagination mt-8 flex items-center justify-center gap-2" />
+          </>
+        )}
 
         <style jsx global>{`
           .custom-bullet {
