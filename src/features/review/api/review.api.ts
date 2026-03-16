@@ -9,6 +9,16 @@ export interface CreateReviewData {
   comment: string;
 }
 
+export interface TReview {
+  _id: string;
+  rating: number;
+  comment: string;
+  user?: {
+    name?: string;
+    profileImage?: string;
+  };
+}
+
 // Create Review
 export const createReview = async (data: CreateReviewData) => {
   const res = await axiosInstance.post("/review/create-review", data);
