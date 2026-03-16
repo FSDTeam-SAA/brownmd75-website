@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const instruments = [
   {
@@ -81,9 +82,12 @@ export default function BrowseInstruments() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <button className="inline-flex min-w-[190px] items-center justify-center rounded-md bg-[#f59e0b] px-8 py-3.5 text-base font-semibold text-white transition hover:bg-[#e6920a] cursor-pointer">
+          <Link
+            href={"/equipments"}
+            className="inline-flex min-w-[190px] items-center justify-center rounded-md bg-[#f59e0b] px-8 py-3.5 text-base font-semibold text-white transition hover:bg-[#e6920a] cursor-pointer"
+          >
             View All
-          </button>
+          </Link>
         </div>
       </div>
     </section>
