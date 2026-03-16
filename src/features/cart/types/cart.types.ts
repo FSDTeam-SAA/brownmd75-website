@@ -52,3 +52,23 @@ export interface GetCartResponse {
   message: string;
   data: CartData;
 }
+
+// Checkout types
+export type PaymentMethod = "stripe" | "cod";
+
+export interface ShippingAddress {
+  fullName: string;
+  houseNumber: string;
+  streetAddress: string;
+  cityName: string;
+  stateName: string;
+  zipCode: string;
+  phone: string;
+  email: string;
+}
+
+export interface CheckoutPayload {
+  shippingAddress: ShippingAddress;
+  orderNotes: string;
+  paymentMethod: PaymentMethod;
+}
