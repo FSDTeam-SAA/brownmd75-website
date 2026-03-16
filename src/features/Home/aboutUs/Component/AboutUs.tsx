@@ -30,7 +30,7 @@ export default function AboutUs() {
             {/* image */}
             <div className="relative z-10 aspect-[1.12/1] w-full overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop"
+                src="/images/Container.png"
                 alt="Construction worker with equipment"
                 fill
                 className="object-cover"

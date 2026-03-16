@@ -8,24 +8,21 @@ const steps = [
     title: "Discover the Right Equipment",
     description:
       "Explore a powerful marketplace of premium machinery tailored for every project size. With smart search and advanced filters, finding the exact equipment you need takes only moments - no endless browsing, no guesswork.",
-    image:
-      "https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/Howitworks-1.png",
   },
   {
     id: "02",
     title: "Book with Confidence",
     description:
       "Review detailed specifications, transparent pricing, and real-time availability before making your selection. Secure your equipment online in just a few clicks with a seamless, reliable checkout experience designed for professionals.",
-    image:
-      "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/Howitworks-2.png",
   },
   {
     id: "03",
     title: "Delivered to Your Job Site",
     description:
       "Sit back while we take care of the logistics. Your equipment arrives on time, ready to perform - delivered directly to your worksite so you can stay focused on productivity and results.",
-    image:
-      "https://images.unsplash.com/photo-1541976590-713941681591?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/Howitworks-3.png",
   },
 ];
 
