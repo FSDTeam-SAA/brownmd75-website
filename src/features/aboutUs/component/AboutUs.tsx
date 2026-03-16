@@ -2,6 +2,7 @@ import Hero from "@/components/sheared/Hero";
 import React from "react";
 import AboutOurCompany from "./AboutOurCompany";
 import WhychooseUs from "./WhychooseUs";
+import FrequentlyAskedQuestions from "./FrequentlyAskedQuestions";
 
 export default function AboutUs() {
   return (
@@ -13,6 +14,7 @@ export default function AboutUs() {
       />
       <AboutOurCompany />
       <WhychooseUs />
+      <FrequentlyAskedQuestions />
     </div>
   );
 }
