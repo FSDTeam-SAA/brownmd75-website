@@ -54,7 +54,9 @@ export default function Navbar() {
             ))}
           </ul>
 
-          <ShoppingCart className="w-5 h-5 text-gray-700 cursor-pointer" />
+          <Link href="/cart">
+            <ShoppingCart className="w-5 h-5 text-gray-700 cursor-pointer hover:text-[#f4a100] transition-colors" />
+          </Link>
 
           <Link href={`/login`}>
             <button className="bg-primary text-white px-6 py-3 rounded-md font-medium cursor-pointer">
@@ -87,7 +89,9 @@ export default function Navbar() {
             </li>
 
             <div className="flex items-center gap-4 pt-2 cursor-pointer">
-              <ShoppingCart className="w-5 h-5 cursor-pointer" />
+              <Link href="/cart">
+                <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-[#f4a100] transition-colors" />
+              </Link>
               <Link href={`/login`}>
                 <button className="bg-primary text-white px-6 py-3 rounded-md font-medium cursor-pointer">
                   Log In

@@ -5,9 +5,11 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEquipmentById } from "../hooks/useEquipment";
 import { EquipmentItem } from "./Equipment";
-import { Star } from "lucide-react";
+import { Star, Minus, Plus } from "lucide-react";
 import ReviewList from "../../review/component/ReviewList";
 import ReviewForm from "../../review/component/ReviewForm";
+import AddToCartButton from "../../cart/components/AddToCartButton";
+import { RentalType } from "../../cart/types/cart.types";
 
 export default function EquipmentDetails() {
   const { id } = useParams();
@@ -15,6 +17,14 @@ export default function EquipmentDetails() {
   const [activeImage, setActiveImage] = useState(0);
   const [activeTab, setActiveTab] = useState("description");
   const [selectedDuration, setSelectedDuration] = useState("hour");
+  const [quantity, setQuantity] = useState(1);
+
+  const rentalTypeMapping: Record<string, RentalType> = {
+    hour: "price_per_hour",
+    day: "price_per_day",
+    week: "price_per_week",
+    month: "price_per_month",
+  };
 
   if (isLoading) {
     return (
@@ -135,14 +145,14 @@ export default function EquipmentDetails() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-8">
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <span className="text-lg font-bold text-[#1d2433]">
                   $ Price :
                 </span>
                 <span className="text-lg font-bold text-gray-600">
                   {equipment.price_per_hour.toFixed(2)}/Hour
                 </span>
-              </div>
+              </div> */}
 
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1d2433]">
@@ -170,7 +180,7 @@ export default function EquipmentDetails() {
             </div>
 
             {/* Duration Selector */}
-            {/* <div className="mt-8 grid grid-cols-4 gap-3">
+            <div className="mt-8 grid grid-cols-4 gap-3">
               {prices.map((price) => (
                 <button
                   key={price.key}
@@ -184,11 +194,38 @@ export default function EquipmentDetails() {
                   {price.label}
                 </button>
               ))}
-            </div> */}
+            </div>
 
-            <button className="mt-8 w-full rounded-md bg-[#f4a100] py-4 text-lg font-bold text-white shadow-lg transition-all hover:opacity-95 active:scale-[0.98]">
-              Book
-            </button>
+            {/* Quantity Selector */}
+            <div className="mt-8 flex items-center gap-4">
+              <span className="text-sm font-bold text-[#1d2433]">
+                Quantity:
+              </span>
+              <div className="flex items-center rounded-md border border-gray-200">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="flex h-10 w-10 items-center justify-center text-gray-500 transition hover:bg-gray-50 active:bg-gray-100"
+                >
+                  <Minus size={16} />
+                </button>
+                <div className="flex h-10 w-12 items-center justify-center border-x border-gray-200 text-sm font-bold text-[#1d2433]">
+                  {quantity}
+                </div>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="flex h-10 w-10 items-center justify-center text-gray-500 transition hover:bg-gray-50 active:bg-gray-100"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
+
+            <AddToCartButton
+              equipmentId={id as string}
+              quantity={quantity}
+              rentalType={rentalTypeMapping[selectedDuration]}
+              className="mt-8 w-full"
+            />
           </div>
         </div>
 
