@@ -1,8 +1,14 @@
 "use client";
-import { Search, Calendar, Clock, Truck } from "lucide-react";
+import { useState } from "react";
+import { Search, Calendar, Truck } from "lucide-react";
 import { motion } from "framer-motion";
+import { searchEquipment } from "@/features/equipment/api/equipment.api";
 
 export default function FindMyRentals() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -15,6 +21,34 @@ export default function FindMyRentals() {
     },
   };
 
+  const handleSearch = async () => {
+    try {
+      const results = await searchEquipment(searchTerm, startDate, endDate);
+
+      // Filter equipment whose available dates cover the user's selected rental period
+      const filtered =
+        startDate && endDate
+          ? results.filter(
+              (equipment: {
+                availableDates?: { startDate?: string; endDate?: string };
+              }) => {
+                const available = equipment?.availableDates;
+                if (!available?.startDate || !available?.endDate) return false;
+                const availStart = new Date(available.startDate);
+                const availEnd = new Date(available.endDate);
+                const userStart = new Date(startDate);
+                const userEnd = new Date(endDate);
+                return availStart <= userStart && availEnd >= userEnd;
+              },
+            )
+          : results;
+
+      console.log("Search Results:", filtered);
+    } catch (error) {
+      console.error("Search failed:", error);
+    }
+  };
+
   return (
     <motion.div
       variants={itemVariants}
@@ -24,46 +58,36 @@ export default function FindMyRentals() {
         Find Your Perfect Instrument
       </h3>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1fr_1.1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1fr]">
         {/* Field: Select Equipment */}
         <div className="group relative flex items-center rounded-xl bg-white px-6 py-4 transition-all hover:ring-2 hover:ring-amber-500">
           <Truck className="h-6 w-6 text-[#94a3b8] group-hover:text-amber-500" />
           <input
             type="text"
             placeholder="Select Equipment"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="ml-4 w-full bg-transparent text-[15px] font-medium text-gray-900 placeholder-[#94a3b8] outline-none"
           />
         </div>
 
         {/* Field: Date Range */}
         <div className="group relative flex items-center rounded-xl bg-white px-6 py-4 transition-all hover:ring-2 hover:ring-amber-500">
-          <Calendar className="h-6 w-6 text-[#94a3b8] group-hover:text-amber-500" />
-          <div className="ml-4 flex w-full items-center justify-between text-[14px] font-medium text-gray-600">
-            <span className="text-[#94a3b8]">mm/dd/yyyy</span>
-            <span className="mx-4 text-[#cbd5e1]">-</span>
-            <span className="text-[#94a3b8]">mm/dd/yyyy</span>
-          </div>
-        </div>
-
-        {/* Field: Time Range */}
-        <div className="group relative flex items-center rounded-xl bg-white px-6 py-4 transition-all hover:ring-2 hover:ring-amber-500">
-          <Clock className="h-6 w-6 text-[#94a3b8] group-hover:text-amber-500" />
-          <div className="ml-4 flex w-full items-center justify-between text-[14px] font-medium text-gray-600">
-            <div className="flex items-center">
-              <span className="text-[#94a3b8]">--:--</span>
-              <select className="ml-2 bg-transparent text-[11px] font-bold uppercase text-gray-500 hover:text-gray-900 outline-none">
-                <option>AM</option>
-                <option>PM</option>
-              </select>
-            </div>
-            <span className="mx-4 text-[#cbd5e1]">-</span>
-            <div className="flex items-center">
-              <span className="text-[#94a3b8]">--:--</span>
-              <select className="ml-2 bg-transparent text-[11px] font-bold uppercase text-gray-500 hover:text-gray-900 outline-none">
-                <option>AM</option>
-                <option>PM</option>
-              </select>
-            </div>
+          <Calendar className="h-6 w-6 shrink-0 text-[#94a3b8] group-hover:text-amber-500" />
+          <div className="ml-4 flex w-full items-center gap-2 text-[14px] font-medium text-gray-600">
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full bg-transparent text-[14px] font-medium text-gray-600 outline-none scheme-light placeholder-[#94a3b8]"
+            />
+            <span className="shrink-0 text-[#cbd5e1]">-</span>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full bg-transparent text-[14px] font-medium text-gray-600 outline-none scheme-light placeholder-[#94a3b8]"
+            />
           </div>
         </div>
       </div>
@@ -72,6 +96,7 @@ export default function FindMyRentals() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          onClick={handleSearch}
           className="flex w-full min-w-[280px] items-center justify-center gap-3 rounded-xl bg-[#F59E0B] py-5 text-[17px] font-bold text-white shadow-lg transition-colors hover:bg-[#D97706] md:w-auto px-12 cursor-pointer"
         >
           <Search className="h-6 w-6" />
