@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Hero from "@/components/sheared/Hero";
 import { useCategories } from "../hooks/useCategories";
 import PageCategoryCard from "./PageCategoryCard";
@@ -7,7 +8,33 @@ import { Loader2, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Categories() {
-  const { data, isLoading, error } = useCategories();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, error } = useCategories(currentPage, 6);
+
+  const meta = data?.meta;
+  const totalPages = meta?.totalPage ?? 1;
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Build the array of page numbers to show
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | "...")[] = [];
+    pages.push(1);
+    if (currentPage > 3) pages.push("...");
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (currentPage < totalPages - 2) pages.push("...");
+    pages.push(totalPages);
+    return pages;
+  };
 
   return (
     <div className="min-h-screen bg-[#fafbfc]">
@@ -68,34 +95,52 @@ export default function Categories() {
               ))}
             </div>
 
-            {/* Pagination UI */}
-            <div className="mt-20 flex items-center justify-center gap-2">
-              <button className="h-10 w-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:border-[#f4a100] hover:text-[#f4a100] transition-all">
-                <ChevronLeft size={20} />
-              </button>
+            {/* Dynamic Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-20 flex items-center justify-center gap-2">
+                {/* Prev */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="h-10 w-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:border-[#f4a100] hover:text-[#f4a100] transition-all disabled:opacity-40 disabled:cursor-not-allowed "
+                >
+                  <ChevronLeft size={20} />
+                </button>
 
-              <button className="h-10 w-10 flex items-center justify-center rounded-full border border-gray-100 text-gray-500 font-bold text-sm bg-white hover:border-gray-200 transition-all">
-                1
-              </button>
+                {/* Page Numbers */}
+                {getPageNumbers().map((page, idx) =>
+                  page === "..." ? (
+                    <span
+                      key={`ellipsis-at-${idx}`}
+                      className="px-2 text-gray-300 font-bold"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`h-10 w-10 flex items-center justify-center rounded-full font-bold text-sm transition-all ${
+                        currentPage === page
+                          ? "bg-[#f4a100] text-white shadow-md shadow-[#f4a100]/20"
+                          : "border border-gray-100 bg-white text-gray-500 hover:border-gray-200"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ),
+                )}
 
-              <button className="h-10 w-10 flex items-center justify-center rounded-full bg-[#f4a100] text-white font-bold text-sm shadow-md shadow-[#f4a100]/20">
-                2
-              </button>
-
-              <button className="h-10 w-10 flex items-center justify-center rounded-full border border-gray-100 text-gray-500 font-bold text-sm bg-white hover:border-gray-200 transition-all">
-                3
-              </button>
-
-              <span className="px-2 text-gray-300 font-bold">...</span>
-
-              <button className="h-10 w-10 flex items-center justify-center rounded-full border border-gray-100 text-gray-500 font-bold text-sm bg-white hover:border-gray-200 transition-all">
-                6
-              </button>
-
-              <button className="h-10 w-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:border-[#f4a100] hover:text-[#f4a100] transition-all">
-                <ChevronRight size={20} />
-              </button>
-            </div>
+                {/* Next */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="h-10 w-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:border-[#f4a100] hover:text-[#f4a100] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
           </>
         )}
 
