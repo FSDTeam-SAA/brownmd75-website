@@ -83,9 +83,9 @@ const OrderHistoryTable = () => {
                     <td className="py-5 px-2">
                       {new Date(order.createdAt).toLocaleDateString("en-GB")}
                     </td>
-                    <td className="py-5 px-2 font-bold text-gray-800">
+                    {/* <td className="py-5 px-2 font-bold text-gray-800">
                       ${order.totalAmount.toFixed(2)}
-                    </td>
+                    </td> */}
                     <td className="py-5 px-2">
                       <span
                         className={`px-3 py-1 rounded-md text-xs font-medium ${
