@@ -3,6 +3,7 @@ import React from "react";
 import AboutOurCompany from "./AboutOurCompany";
 import WhychooseUs from "./WhychooseUs";
 import FrequentlyAskedQuestions from "./FrequentlyAskedQuestions";
+import GetStarted from "./GetStarted";
 
 export default function AboutUs() {
   return (
@@ -13,6 +14,7 @@ export default function AboutUs() {
         description="From small tools to heavy machinery, we ensure every piece of equipment meets the highest standards of safety and performance."
       />
       <AboutOurCompany />
+      <GetStarted />
       <WhychooseUs />
       <FrequentlyAskedQuestions />
     </div>

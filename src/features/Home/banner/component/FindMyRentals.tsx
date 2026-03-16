@@ -24,7 +24,7 @@ export default function FindMyRentals() {
         Find Your Perfect Instrument
       </h3>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1fr_1.1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1fr]">
         {/* Field: Select Equipment */}
         <div className="group relative flex items-center rounded-xl bg-white px-6 py-4 transition-all hover:ring-2 hover:ring-amber-500">
           <Truck className="h-6 w-6 text-[#94a3b8] group-hover:text-amber-500" />
@@ -42,28 +42,6 @@ export default function FindMyRentals() {
             <span className="text-[#94a3b8]">mm/dd/yyyy</span>
             <span className="mx-4 text-[#cbd5e1]">-</span>
             <span className="text-[#94a3b8]">mm/dd/yyyy</span>
-          </div>
-        </div>
-
-        {/* Field: Time Range */}
-        <div className="group relative flex items-center rounded-xl bg-white px-6 py-4 transition-all hover:ring-2 hover:ring-amber-500">
-          <Clock className="h-6 w-6 text-[#94a3b8] group-hover:text-amber-500" />
-          <div className="ml-4 flex w-full items-center justify-between text-[14px] font-medium text-gray-600">
-            <div className="flex items-center">
-              <span className="text-[#94a3b8]">--:--</span>
-              <select className="ml-2 bg-transparent text-[11px] font-bold uppercase text-gray-500 hover:text-gray-900 outline-none">
-                <option>AM</option>
-                <option>PM</option>
-              </select>
-            </div>
-            <span className="mx-4 text-[#cbd5e1]">-</span>
-            <div className="flex items-center">
-              <span className="text-[#94a3b8]">--:--</span>
-              <select className="ml-2 bg-transparent text-[11px] font-bold uppercase text-gray-500 hover:text-gray-900 outline-none">
-                <option>AM</option>
-                <option>PM</option>
-              </select>
-            </div>
           </div>
         </div>
       </div>
